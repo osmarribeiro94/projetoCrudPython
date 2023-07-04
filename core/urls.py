@@ -1,11 +1,9 @@
-from django.contrib import admin
-from django.urls import path, include
-from .views import home, salvar, editar, update, deletar
+from . import views
+from django.urls import path
 
 urlpatterns = [
-    path('', home),
-    path('salvar/', salvar, name="salvar"),
-    path('editar/<int:id>', editar, name="editar"),
-    path('update/<int:id>', update, name="update"),
-    path('deletar/<int:id>', deletar, name="deletar")
+    path('index', views.index, name='index'),
+    path('criar', views.criar, name='criar'),
+    path('editar/<int:id>', views.editar, name='editar'),
+    path('deletar/<int:id>', views.deletar, name='deletar'),
 ]

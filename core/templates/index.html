@@ -1,22 +1,27 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-   <head>
-       <meta charset="utf-8"/>
-       <title>Entendo a estrutura e semântica do HTML5</title>
-   </head>
-   <body>
-       {% for pessoa in pessoas %}
-            <li>{{pessoa.id}} - {{pessoa.nome}}
-                <a href="{% url 'editar' pessoa.id %}">Editar</a>
-                <a href="{% url 'deletar' pessoa.id %}">Deletar</a>
-            </li>  
-       {% endfor %}
-
-    <form action="{% url 'salvar' %}" method="POST">
-        {% csrf_token %}
-        <input type="text" name="nome">
-        <button type="submit">Salvar</button>
-    </form>
-
-   </body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<div class="card-body" style="margin: auto; width: 50% !important;">
+    <h2>Lista de Pessoa <span style="float: right;"><a type="button" class="btn btn-success" href="{%url 'criar' %}"><span class="glyphicon glyphicon-plus"></span> Criar</a></span></h2> 
+    <table class="table table-bordered table-striped" style="margin-top: 30px; ">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pessoa in pessoas %}
+            <tr>
+                <td>{{ pessoa.id }}</td>
+                <td>{{ pessoa.nome }}</td>
+                <td>
+                    <a type="button" class="btn btn-warning" href="{% url 'editar' pessoa.id %}"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+                    <a type="button" class="btn btn-danger" href="{% url 'deletar' pessoa.id %}"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+</div>
+{% endblock %}

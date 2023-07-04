@@ -1,28 +1,44 @@
 from django.shortcuts import render, redirect
-from .models import  Pessoa
+from .models import Pessoa
+from .forms import PessoaForm
 
-def home(request):
-    pessoas = Pessoa.objects.all()
-    return render(request,"index.html",{"pessoas": pessoas})
+# Create your views here.
+def index(request):  
+    pessoas = Pessoa.objects.all()  
+    return render(request,"index.html",{"pessoas": pessoas})  
 
-def salvar(request):
-    vnome = request.POST.get("nome")
-    Pessoa.objects.create(nome = vnome)
-    pessoas = Pessoa.objects.all()
-    return render(request, "index.html", {"pessoas": pessoas})
+def criar(request):  
+    if request.method == "POST":  
+        form = PessoaForm(request.POST)  
+        if form.is_valid():  
+            try:  
+                form.save() 
+                model = form.instance
+                return redirect('index')  
+            except:  
+                pass  
+    else:  
+        form = PessoaForm()  
+    return render(request,'criar.html',{'form':form})  
 
-def editar(request, id):
+def editar(request, id):  
     pessoa = Pessoa.objects.get(id=id)
-    return render(request, "update.html", {"pessoa": pessoa})
-
-def update(request, id):
-    vnome = request.POST.get("nome")
-    pessoa = Pessoa.objects.get(id=id)
-    pessoa.nome = vnome
-    pessoa.save()
-    return redirect(home)
+    form = PessoaForm(initial={'id': pessoa.id, 'nome': pessoa.nome})
+    if request.method == "POST":  
+        form = PessoaForm(request.POST, instance=pessoa)  
+        if form.is_valid():  
+            try:  
+                form.save() 
+                model = form.instance
+                return redirect('index')  
+            except Exception as e: 
+                pass    
+    return render(request,'editar.html',{'form':form})  
 
 def deletar(request, id):
     pessoa = Pessoa.objects.get(id=id)
-    pessoa.delete()
-    return redirect(home)
+    try:
+        pessoa.delete()
+    except:
+        pass
+    return redirect('index')
