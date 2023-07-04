@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+   <head>
+       <meta charset="utf-8"/>
+       <title>Entendo a estrutura e semântica do HTML5</title>
+   </head>
+   <body>
+       {% for pessoa in pessoas %}
+            <li>{{pessoa.id}} - {{pessoa.nome}}
+                <a href="{% url 'editar' pessoa.id %}">Editar</a>
+                <a href="{% url 'deletar' pessoa.id %}">Deletar</a>
+            </li>  
+       {% endfor %}
+
+    <form action="{% url 'salvar' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="nome">
+        <button type="submit">Salvar</button>
+    </form>
+
+   </body>
+</html>
